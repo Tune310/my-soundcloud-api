@@ -1,0 +1,19 @@
+{
+  "name": "soundcloud-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "curl": "^0.1.4",
+    "express": "^4.13.4",
+    "node-soundcloud": "0.0.5",
+    "path": "^0.12.7",
+    "soundcloud": "^3.1.0"
+  }
+}

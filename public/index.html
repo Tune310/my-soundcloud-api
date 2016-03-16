@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Soundcloud API</title>
+    <!-- <script src="https://connect.soundcloud.com/sdk.js"></script> -->
+    <!-- <script type="text/javascript" src="scripts/soundcloud.player.api.js"></script> -->
+
+    <script src="http://code.jquery.com/jquery-2.0.0.js"></script>
+    <script type="text/javascript" src="https://w.soundcloud.com/player/api.js"></script>
+  </head>
+  <body>
+  <form>
+    Artist:<br>
+    <!-- this our search query on the front end -->
+    <input type="text" name="Artist" id="Artist" value=""><br>
+    <input type="submit" id="submitSong" value="Submit">
+  </form>
+    <button id="loadBtn">Load Song</button>
+    <button id="pauseBtn">Pause</button>
+    <button id="nextBtn">Next</button>
+    <!-- this is the widgetPlayer -->
+    <iframe id="myPlayer" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/76067623&amp;auto_play=false&amp;hide_related=true&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true"></iframe>
+    <!-- <object height="81" width="100%" id="myPlayer" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+      <param name="myPlayer" value="http://player.soundcloud.com/player.swf?url=http%3A%2F%2Fsoundcloud.com%2Fmatas%2Fhobnotropic&enable_api=true&object_id=myPlayer"></param>
+      <param name="allowscriptaccess" value="always"></param>
+      <embed allowscriptaccess="always" height="81" src="http://player.soundcloud.com/player.swf?url=http%3A%2F%2Fsoundcloud.com%2Fmatas%2Fhobnotropic&enable_api=true&object_id=myPlayer" type="application/x-shockwave-flash" width="100%" name="myPlayer"></embed>
+    </object> -->
+    <div id="target"></div>
+    <script>
+    $(function(){
+
+      // widget is the our mp3 player
+      var widget = SC.Widget(document.querySelector('iframe'));
+
+      var userArtist = $('#Artist').val()
+      // submit the input value under the textfield Artist: and play a song
+      $('#submitSong').click(function(e){
+        var userArtist = $('#Artist').val()
+        e.preventDefault()
+        if($('#Artist').val() == "") {
+          console.log('Artist Not Found');
+        }else{
+        e.preventDefault()
+        var userArtist = $('#Artist').val()
+        console.log(userArtist)
+        console.log('submitted')
+        // playerUrl is what's getting searched on the back-end and were adding this variable we made to give us a track through sound cloud
+        var playerUrl = "https://api.soundcloud.com/tracks?client_id=030341538cff3ba796885fa35911cb51&q="+userArtist+ ""
+        $.ajax({
+          url: playerUrl,
+          // url:"/getArtist",
+
+          method: "GET",
+          contentType: 'application/json',
+          // I forget what this does .... *****GABE PLEASE EXPLAIN :3
+          data: JSON.stringify({artist: userArtist})
+        })
+          .done(function(data){
+            console.log(data)
+            var widget = SC.Widget(document.querySelector('iframe'));
+            // get the first song in the widget when we search an artist or track
+            var widgetUrl = data[0].uri
+            console.log(data[0].uri)
+            // play this song
+            widget.load(widgetUrl)
+          })
+
+      }
+      })
+
+      // this will pause a song
+      $('#pauseBtn').click(function(){
+        widget.toggle()
+      })
+
+      //this skips a song
+      $('#nextBtn').click(function(){
+        widget.next()
+      })
+      var widget = document.querySelector('iframe');
+      // var iframeElementID = iframeElement.id;
+
+
+      // var widget2 = SC.Widget(iframeElementID);
+    })
+
+
+
+    </script>
+  </body>
+</html>
